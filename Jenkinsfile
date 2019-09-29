@@ -1,26 +1,27 @@
+
 pipeline {
-	agent {
-              label 'centos_node'
-              }
-	stages {
-		stage('---clean---'){
-			steps {
-				tool name: 'maven_3.6.1', type: 'maven'
-				sh "mvn clean"
-			}
-		}
-		stage('---test---') {
-			steps {
-				tool name: 'maven_2.2.1', type: 'maven'
-				sh "mvn test"
-			}
-		}
-		stage('---package---'){
-			steps {
-				tool name: 'Maven-3.1.0', type: 'maven'
-				sh "mvn package"
-			}
-		}
-	}
+    agent {
+            label 'centos_node'
+          } 
+    stages {
+        stage('clean') { 
+            steps {
+                    sh 'rm -rf PipelineDemoCode'
+                    sh 'git clone https://github.com/lakshmikar23/PipelineDemoCode.git'
+                    sh 'mvn clean -f PipelineDemoCode '
+            }
+        }
+        stage('Test') { 
+            steps {
+                sh 'mvn test -f PipelineDemoCode'
+            } 
+        }
+        stage('Deploy') { 
+            steps {
+               sh 'mvn package -f PipelineDemoCode' 
+            }
+        }
+    }
 }
+
          
